@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    Animator _anim;
+
     [SerializeField] float _hSpeed = 6f, _vSpeed = 4f;
     [SerializeField] float _hBoostSpeed = 8f, _vBoostSpeed = 5.5f;
     float _hInput, _vInput;
+
+
+    void Awake()
+    {
+        _anim = GetComponent<Animator>();
+    }
 
     void Start()
     {
@@ -22,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
     {
         _hInput = Input.GetAxisRaw("Horizontal");
         _vInput = Input.GetAxisRaw("Vertical");
+
+        PlayerTurnAnimations();
 
         if (GameManager.Instance.SpeedBoostActive)
         {
@@ -46,6 +56,30 @@ public class PlayerMovement : MonoBehaviour
         else if (transform.position.x < -10.5f)
         {
             transform.position = new Vector3(10.5f, transform.position.y, transform.position.z);
+        }
+    }
+
+    //if hInput > 0
+    //set movingRight bool to true
+    //else if hInput < 0
+    //set movingLeft bool to true
+
+    void PlayerTurnAnimations()
+    {
+        if (_hInput > 0)
+        {
+            _anim.SetBool("movingLeft", false);
+            _anim.SetBool("movingRight", true);
+        }
+        else if (_hInput < 0)
+        {
+            _anim.SetBool("movingRight", false);
+            _anim.SetBool("movingLeft", true);
+        }
+        else
+        {
+            _anim.SetBool("movingRight", false);
+            _anim.SetBool("movingLeft", false);
         }
     }
 
