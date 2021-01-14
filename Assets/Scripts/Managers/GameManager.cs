@@ -31,15 +31,12 @@ public class GameManager : MonoBehaviour
         Score += scoreToAdd;
         UIManager.Instance.UpdateScoreText(Score);
     }
+
+    [SerializeField] Animator _mainCameraAnim;
     //------------------------------------------------------------------------------------------------------------------
     void Awake()
     {
         _instance = this;
-    }
-    
-    void Start()
-    {
-        
     }
 
     void Update()
@@ -102,6 +99,11 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    public void ShakeTheCamera()
+    {
+        _mainCameraAnim.SetTrigger("shake");
+    }
 
 
 }

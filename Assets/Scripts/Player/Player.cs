@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
 
     int _lives = 3;
     [SerializeField] List<GameObject> _damagedIndicators;
-    [SerializeField] GameObject _explosionPref;
+    [SerializeField] GameObject _explosionPref, _playerDamagedAudioPref;
 
 
     void Awake()
@@ -84,6 +84,7 @@ public class Player : MonoBehaviour
 
         _lives --;
         ShowDamagedIndicator();
+        Instantiate(_playerDamagedAudioPref, transform.position, Quaternion.identity);
         UIManager.Instance.UpdateLivesImage(_lives);
 
         if (_lives < 1)
@@ -97,7 +98,7 @@ public class Player : MonoBehaviour
         _damagedIndicators[index].SetActive(true);
         _damagedIndicators.Remove(_damagedIndicators[index]);
 
-        //trigger camera shake
+        GameManager.Instance.ShakeTheCamera();
     }
 
     void Death()

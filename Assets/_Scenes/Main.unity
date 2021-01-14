@@ -279,9 +279,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9edbbb74b5d40a4a81e4ba34634cca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _laserPref: {fileID: 7528615274873840017, guid: 7997914ce9d2fdb4f8848a0e07a9a5ed,
+  _laserPref: {fileID: 7528615274873840017, guid: 9e19e4ef01e1d7245a730f94e0733188,
     type: 3}
-  _tripleShotLaserPref: {fileID: 4475874990931292105, guid: 09275ae5ecf4f5941aba7ff766005059,
+  _tripleShotLaserPref: {fileID: 4475874990931292105, guid: 46a6a49f39eba8241b7b620f893ed09d,
     type: 3}
   _shields: {fileID: 1987391617}
   _speedBoostTrail: {fileID: 330629592}
@@ -294,6 +294,8 @@ MonoBehaviour:
   - {fileID: 1617641866}
   - {fileID: 523984607}
   _explosionPref: {fileID: 7373905781434431856, guid: 8f27e14a9859c22428a56f149e909ddc,
+    type: 3}
+  _playerDamagedAudioPref: {fileID: 8485130977549396420, guid: f6789d4326cc37148a4c3bdefb8fb78e,
     type: 3}
 --- !u!212 &195240956
 SpriteRenderer:
@@ -951,6 +953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75458081c61431b4d8bc75f0e1b794e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainCameraAnim: {fileID: 963194230}
   _tripleShotActiveTime: 5
   _speedBoostActiveTime: 3
 --- !u!4 &319484111
@@ -1578,7 +1581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyContainer: {fileID: 7508305}
-  _enemyPref: {fileID: 4235215805321892050, guid: 319463db74845084a991c9d792af9bb8,
+  _enemyPref: {fileID: 4235215805321892050, guid: 0574ee9f2fa633b48a417e87d5a8ea99,
     type: 3}
   _powerupPrefs:
   - {fileID: 7864032648973507945, guid: 25e6226e185d2394a9684fcb7202573d, type: 3}
@@ -1611,6 +1614,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1743,6 +1747,25 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!95 &963194230
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7d35296130c346b4eb4630d77587c6d8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &965844412
 GameObject:
   m_ObjectHideFlags: 0
