@@ -44,12 +44,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4235215805321892050}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48a0940cc348a5a47ae7ea699a7b1fd6, type: 3}
+  m_Script: {fileID: 11500000, guid: 9678db3f8ca114b49b46ce32dcace1f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _LaserFireClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   _speed: 3
-  _laserPref: {fileID: 8223641142264268450, guid: 5130dd6981fb5214bb7d8edf3f4d41b4,
+  _laserPref: {fileID: 8223641142264268450, guid: 3aa0682b57354504baefd7610bb124ec,
     type: 3}
 --- !u!212 &1179371069334535486
 SpriteRenderer:
