@@ -59,11 +59,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //if hInput > 0
-    //set movingRight bool to true
-    //else if hInput < 0
-    //set movingLeft bool to true
-
     void PlayerTurnAnimations()
     {
         if (_hInput > 0)
