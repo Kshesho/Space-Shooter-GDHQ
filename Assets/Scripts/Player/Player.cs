@@ -96,6 +96,8 @@ public class Player : MonoBehaviour
         int index = Random.Range(0, _damagedIndicators.Count);
         _damagedIndicators[index].SetActive(true);
         _damagedIndicators.Remove(_damagedIndicators[index]);
+
+        //trigger camera shake
     }
 
     void Death()
