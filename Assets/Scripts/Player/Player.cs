@@ -12,10 +12,10 @@ public class Player : MonoBehaviour
     bool _shieldsActive;
 
     int _lives = 3;
-    [SerializeField] List<GameObject> _damagedIndicators;
+    [SerializeField] List<GameObject> _inactiveDamagedIndicators, _activeDamagedIndicators;
     [SerializeField] GameObject _explosionPref, _playerDamagedAudioPref;
 
-
+    //----------------------------------------------------------------------------------------------------------------------
     void Awake()
     {
         _audio = GetComponent<AudioSource>();
@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
             Shoot();
         }
     }
-
+    //----------------------------------------------------------------------------------------------------------------------
 
     void Shoot()
     {
@@ -94,11 +94,23 @@ public class Player : MonoBehaviour
     }
     void ShowDamagedIndicator()
     {
-        int index = Random.Range(0, _damagedIndicators.Count);
-        _damagedIndicators[index].SetActive(true);
-        _damagedIndicators.Remove(_damagedIndicators[index]);
+        int index = Random.Range(0, _inactiveDamagedIndicators.Count);
+        GameObject indicator = _inactiveDamagedIndicators[index];
+        indicator.SetActive(true);
+
+        _activeDamagedIndicators.Add(indicator);
+        _inactiveDamagedIndicators.Remove(indicator);
 
         GameManager.Instance.ShakeTheCamera();
+    }
+    void RemoveDamageIndicator()
+    {
+        int index = Random.Range(0, _activeDamagedIndicators.Count);
+        GameObject indicator = _activeDamagedIndicators[index];
+        indicator.SetActive(false);
+
+        _inactiveDamagedIndicators.Add(indicator);
+        _activeDamagedIndicators.Remove(indicator);
     }
 
     void Death()
@@ -106,6 +118,20 @@ public class Player : MonoBehaviour
         GameManager.Instance.PlayerDied();
         Instantiate(_explosionPref, this.transform.position, Quaternion.identity);
         Destroy(this.gameObject);
+    }
+
+    public void GainOneLife()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            RemoveDamageIndicator();
+            UIManager.Instance.UpdateLivesImage(_lives);
+        }
+        else
+        {
+            ActivateShield();
+        }
     }
 
     public void ActivateShield()

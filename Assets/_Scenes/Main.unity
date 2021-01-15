@@ -288,11 +288,12 @@ MonoBehaviour:
   _tripleShotIndicator: {fileID: 1479512794}
   _standardCooldownTime: 0.5
   _tripleShotCooldownTime: 0.25
-  _damagedIndicators:
+  _inactiveDamagedIndicators:
   - {fileID: 1732034848}
   - {fileID: 2100756767}
   - {fileID: 1617641866}
   - {fileID: 523984607}
+  _activeDamagedIndicators: []
   _explosionPref: {fileID: 7373905781434431856, guid: 8f27e14a9859c22428a56f149e909ddc,
     type: 3}
   _playerDamagedAudioPref: {fileID: 8485130977549396420, guid: f6789d4326cc37148a4c3bdefb8fb78e,
@@ -1587,6 +1588,7 @@ MonoBehaviour:
   - {fileID: 7864032648973507945, guid: 25e6226e185d2394a9684fcb7202573d, type: 3}
   - {fileID: 7969918613244893313, guid: de13de66645e6ac4c87f994d5aa908dc, type: 3}
   - {fileID: 4349561632676560637, guid: 85071af5f8159f04eb54446772f509a4, type: 3}
+  - {fileID: 419623222201286555, guid: e07d675587c42b0438d3cf243b4a14c5, type: 3}
 --- !u!4 &829200676
 Transform:
   m_ObjectHideFlags: 0

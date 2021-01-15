@@ -8,7 +8,8 @@ public class Powerup : MonoBehaviour
     {
         TripleShot,
         Shield,
-        SpeedBoost
+        SpeedBoost,
+        Health
     }
     [SerializeField] TypeOfPowerup _type;
     [SerializeField] float _moveSpeed = 2f;
@@ -27,8 +28,6 @@ public class Powerup : MonoBehaviour
         {
             Player player = other.GetComponent<Player>();
 
-            
-
             switch (_type)
             {
                 case TypeOfPowerup.TripleShot:
@@ -44,6 +43,10 @@ public class Powerup : MonoBehaviour
                     SpawnCollectedAudio(1.4f);
                     player.ActivateSpeedBoostTrail();
                     GameManager.Instance.ActivateSpeedBoost();
+                    break;
+                case TypeOfPowerup.Health:
+                    SpawnCollectedAudio(2f);
+                    player.GainOneLife();
                     break;
             }
             Destroy(this.gameObject);
