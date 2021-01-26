@@ -9,7 +9,8 @@ public class Powerup : MonoBehaviour
         TripleShot,
         Shield,
         SpeedBoost,
-        Health
+        Health,
+        Ammo
     }
     [SerializeField] TypeOfPowerup _type;
     [SerializeField] float _moveSpeed = 2f;
@@ -47,6 +48,10 @@ public class Powerup : MonoBehaviour
                 case TypeOfPowerup.Health:
                     SpawnCollectedAudio(2f);
                     player.GainOneLife();
+                    break;
+                case TypeOfPowerup.Ammo:
+                    player.GainAmmo();
+                    SpawnCollectedAudio(3f);
                     break;
             }
             Destroy(this.gameObject);

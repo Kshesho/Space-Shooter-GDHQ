@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     AudioSource _audio; //laser fire sound effect
 
+    [SerializeField] int _ammoCount = 15; //max ammo is 15
     [SerializeField] GameObject _laserPref, _tripleShotLaserPref, _shields, _speedBoostTrail, _tripleShotIndicator;
     float _cooldownTimer;
     [SerializeField] float _standardCooldownTime = 0.5f, _tripleShotCooldownTime = 0.25f;
@@ -39,7 +40,17 @@ public class Player : MonoBehaviour
             }
             else
             {
-                FireStandardLaser();
+                if (_ammoCount > 0)
+                {
+                    FireStandardLaser();
+                    _ammoCount--;
+                    //update UI
+                }
+                else
+                {
+                    //flash red on the UI
+                    return;
+                }
             }
 
             _audio.Play();
@@ -120,6 +131,8 @@ public class Player : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    #region Powerups
+
     public void GainOneLife()
     {
         if (_lives < 3)
@@ -132,6 +145,11 @@ public class Player : MonoBehaviour
         {
             ActivateShield();
         }
+    }
+
+    public void GainAmmo()
+    {
+        _ammoCount += 20;
     }
 
     public void ActivateShield()
@@ -168,6 +186,8 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(GameManager.Instance.TripleShotActiveTime);
         _tripleShotIndicator.SetActive(false);
     }
+
+    #endregion
 
 
 }
