@@ -57,13 +57,6 @@ public class GameManager : MonoBehaviour
 
     #region Powerups
 
-    public float TripleShotActiveTime
-    {
-        get
-        {
-            return _tripleShotActiveTime;
-        }
-    }
     public float SpeedBoostActiveTime
     {
         get
@@ -71,19 +64,7 @@ public class GameManager : MonoBehaviour
             return _speedBoostActiveTime;
         }
     }
-    [SerializeField] float _tripleShotActiveTime = 5f, _speedBoostActiveTime = 3f;
-    public bool TripleShotActive { get; private set; }
-    public void ActivateTripleShot()
-    {
-        TripleShotActive = true;
-        StopCoroutine("DeactivateTripleShotRoutine");
-        StartCoroutine("DeactivateTripleShotRoutine");
-    }
-    IEnumerator DeactivateTripleShotRoutine()
-    {
-        yield return new WaitForSeconds(_tripleShotActiveTime);
-        TripleShotActive = false;
-    }
+    [SerializeField] float _speedBoostActiveTime = 3f;
 
     public bool SpeedBoostActive { get; private set; }
     public void ActivateSpeedBoost()

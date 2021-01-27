@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    AudioSource _audio; //laser fire sound effect
+    AudioSource _audio;//laser fire sound
 
-    [SerializeField] int _ammoCount = 15; //max ammo is 15
+    // TODO: give the player infinite ammo until the starting asteroid is blown up
+    [SerializeField] int _singleShotAmmoCount = 15, _tripleShotAmmoCount = 8;
+    bool _tripleShotActive;
     [SerializeField] GameObject _laserPref, _tripleShotLaserPref, _shields, _speedBoostTrail, _tripleShotIndicator;
     float _cooldownTimer;
-    [SerializeField] float _standardCooldownTime = 0.5f, _tripleShotCooldownTime = 0.25f;
+    [SerializeField] float _standardCooldownTime = 0.5f, _tripleShotCooldownTime = 0.6f;
     bool _shieldsActive;
 
     int _lives = 3;
@@ -23,48 +25,64 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
+
         if (Input.GetMouseButton(0))
         {
-            Shoot();
+            if (WeaponCooledDown())
+                Shoot();
         }
     }
     //----------------------------------------------------------------------------------------------------------------------
 
     void Shoot()
     {
-        if (WeaponCooledDown())
+        if (_tripleShotActive)
         {
-            if (GameManager.Instance.TripleShotActive)
+            if (_tripleShotAmmoCount > 1)
             {
                 FireTripleShotLaser();
+                UIManager.Instance.UpdateAmmoDisplay_TripleShot(_tripleShotAmmoCount);
             }
             else
             {
-                if (_ammoCount > 0)
-                {
-                    FireStandardLaser();
-                    _ammoCount--;
-                    //update UI
-                }
-                else
-                {
-                    //flash red on the UI
-                    return;
-                }
+                DeactivateTripleShot();
+                FireTripleShotLaser();
             }
-
-            _audio.Play();
+        }
+        else
+        {
+            if (_singleShotAmmoCount > 0)
+            {
+                FireStandardLaser();
+                UIManager.Instance.UpdateAmmoDisplay_SingleShot(_singleShotAmmoCount);
+            }
+            else
+            {
+                UIManager.Instance.OutOfAmmoFlash();
+            }
         }
     } 
     void FireStandardLaser()
     {
         _cooldownTimer = Time.time + _standardCooldownTime;
+
         Instantiate(_laserPref, transform.position, Quaternion.identity);
+        _singleShotAmmoCount--;
+
+        _audio.pitch = 1.2f;
+        _audio.volume = 0.3f;
+        _audio.Play();
     }
     void FireTripleShotLaser()
     {
         _cooldownTimer = Time.time + _tripleShotCooldownTime;
+
         Instantiate(_tripleShotLaserPref, transform.position, Quaternion.identity);
+        _tripleShotAmmoCount--;
+
+        _audio.pitch = 0.7f;
+        _audio.volume = 0.35f;
+        _audio.Play();
     }
 
     bool WeaponCooledDown()
@@ -131,6 +149,8 @@ public class Player : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+
+
     #region Powerups
 
     public void GainOneLife()
@@ -149,7 +169,11 @@ public class Player : MonoBehaviour
 
     public void GainAmmo()
     {
-        _ammoCount += 20;
+        _singleShotAmmoCount = 15;
+        UIManager.Instance.UpdateAmmoDisplay_SingleShot(_singleShotAmmoCount);
+
+        if (_tripleShotActive)
+            DeactivateTripleShot();
     }
 
     public void ActivateShield()
@@ -175,19 +199,28 @@ public class Player : MonoBehaviour
         _speedBoostTrail.SetActive(false);
     }
 
-    public void ActivateTripleShotIndicator()
+    public void ActivateTripleShot()
     {
+        _tripleShotAmmoCount = 8;
+        UIManager.Instance.UpdateAmmoDisplay_TripleShot(_tripleShotAmmoCount);
+        _tripleShotActive = true;
         _tripleShotIndicator.SetActive(true);
-        StopCoroutine("DeactivateTripleShotIndicatorRtn");
-        StartCoroutine("DeactivateTripleShotIndicatorRtn");
+        UIManager.Instance.TripleShotUI();
+
+        //update UI and ammo for when player loses triple shot
+        _singleShotAmmoCount = 15;
+        UIManager.Instance.UpdateAmmoDisplay_SingleShot(_singleShotAmmoCount);
     }
-    IEnumerator DeactivateTripleShotIndicatorRtn()
+    void DeactivateTripleShot()
     {
-        yield return new WaitForSeconds(GameManager.Instance.TripleShotActiveTime);
+        _tripleShotActive = false;
         _tripleShotIndicator.SetActive(false);
+        UIManager.Instance.SingleShotUI();
     }
 
     #endregion
+
+
 
 
 }

@@ -33,8 +33,7 @@ public class Powerup : MonoBehaviour
             {
                 case TypeOfPowerup.TripleShot:
                     SpawnCollectedAudio(0.7f);
-                    player.ActivateTripleShotIndicator();
-                    GameManager.Instance.ActivateTripleShot();
+                    player.ActivateTripleShot();
                     break;
                 case TypeOfPowerup.Shield:
                     SpawnCollectedAudio(1f);
@@ -50,8 +49,8 @@ public class Powerup : MonoBehaviour
                     player.GainOneLife();
                     break;
                 case TypeOfPowerup.Ammo:
-                    player.GainAmmo();
                     SpawnCollectedAudio(3f);
+                    player.GainAmmo();
                     break;
             }
             Destroy(this.gameObject);
