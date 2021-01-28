@@ -9,10 +9,16 @@ public class Player : MonoBehaviour
     // TODO: give the player infinite ammo until the starting asteroid is blown up
     [SerializeField] int _singleShotAmmoCount = 15, _tripleShotAmmoCount = 8;
     bool _tripleShotActive;
-    [SerializeField] GameObject _laserPref, _tripleShotLaserPref, _shields, _speedBoostTrail, _tripleShotIndicator;
+    [SerializeField] GameObject _laserPref, _tripleShotLaserPref, _speedBoostTrail, _tripleShotIndicator;
     float _cooldownTimer;
     [SerializeField] float _standardCooldownTime = 0.5f, _tripleShotCooldownTime = 0.6f;
+
+    [SerializeField] GameObject _shields;
+    SpriteRenderer _shieldsSpriteRend;
+    [SerializeField] Color[] _shieldStrengthColors;
     bool _shieldsActive;
+    int _shieldStrength , _maxShieldStrength = 3;
+    [SerializeField] AudioSource _shieldPowerUpAudio, _shieldPowerDownAudio, _shieldDamagedAudio;
 
     int _lives = 3;
     [SerializeField] List<GameObject> _inactiveDamagedIndicators, _activeDamagedIndicators;
@@ -22,6 +28,7 @@ public class Player : MonoBehaviour
     void Awake()
     {
         _audio = GetComponent<AudioSource>();
+        _shieldsSpriteRend = _shields.GetComponent<SpriteRenderer>();
     }
     void Update()
     {
@@ -107,7 +114,7 @@ public class Player : MonoBehaviour
     {
         if (_shieldsActive)
         {
-            DeactivateShields();
+            WeakenShield();
             return;
         }
 
@@ -179,12 +186,27 @@ public class Player : MonoBehaviour
     public void ActivateShield()
     {
         _shieldsActive = true;
+        _shieldStrength = _maxShieldStrength;
+        _shieldsSpriteRend.color = _shieldStrengthColors[_shieldStrength];
         _shields.SetActive(true);
+
+        _shieldPowerUpAudio.Play();
     }
-    void DeactivateShields()
+    void WeakenShield()
     {
-        _shieldsActive = false;
-        _shields.SetActive(false);
+        _shieldStrength--;
+        _shieldsSpriteRend.color = _shieldStrengthColors[_shieldStrength];
+
+        if (_shieldStrength < 1)
+        {
+            _shieldsActive = false;
+            _shields.SetActive(false);
+
+            _shieldPowerDownAudio.Play();
+            return;
+        }
+
+        _shieldDamagedAudio.Play();
     }
 
     public void ActivateSpeedBoostTrail()

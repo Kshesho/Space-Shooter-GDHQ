@@ -36,7 +36,6 @@ public class Powerup : MonoBehaviour
                     player.ActivateTripleShot();
                     break;
                 case TypeOfPowerup.Shield:
-                    SpawnCollectedAudio(1f);
                     player.ActivateShield();
                     break;
                 case TypeOfPowerup.SpeedBoost:
