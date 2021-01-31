@@ -6,9 +6,16 @@ public class PlayerMovement : MonoBehaviour
 {
     Animator _anim;
 
-    [SerializeField] float _hSpeed = 6f, _vSpeed = 4f;
-    [SerializeField] float _hBoostSpeed = 8f, _vBoostSpeed = 5.5f;
+    bool _boosting, _overheated;
+    float _timeWhenBoostingStarted, _timeWhenBoostingStopped, _overheatedTimerValueWhenBoostingStarted, _overheatedTimerValueWhenBoostingStopped;
+    [SerializeField] float _overheatTimer, _timeBeforeOverheatStarts = 4f;
+    [SerializeField] float _hSpeed, _vSpeed;
+    [SerializeField] float _hBaseSpeed = 6f, _hBoostSpeed = 8f, _vBaseSpeed = 3.5f, _vBoostSpeed = 5.5f;
     float _hInput, _vInput;
+    [SerializeField] float _lerpSpeed = 1;
+
+    [SerializeField] SpriteRenderer _thrusterSpriteRend;
+    [SerializeField] Color _thrusterBaseColor, _thrusterBoostColor;
 
 
     void Awake()
@@ -20,9 +27,25 @@ public class PlayerMovement : MonoBehaviour
     {
         transform.position = Vector2.zero;
     }
-    
+
     void Update()
     {
+        if (!_overheated)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                _boosting = true;
+                _timeWhenBoostingStarted = Time.time;
+                _overheatedTimerValueWhenBoostingStarted = _overheatTimer;
+            }
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                _boosting = false;
+                _timeWhenBoostingStopped = Time.time;
+                _overheatedTimerValueWhenBoostingStopped = _overheatTimer;
+            }
+        }
+        
         Move();
     }
 
@@ -33,20 +56,89 @@ public class PlayerMovement : MonoBehaviour
 
         PlayerTurnAnimations();
 
-        if (GameManager.Instance.SpeedBoostActive)
-        {
-            transform.Translate(new Vector3(_hInput * _hBoostSpeed, _vInput * _vBoostSpeed) * Time.deltaTime);
-        }
-        else
-        {
-            transform.Translate(new Vector3(_hInput * _hSpeed, _vInput * _vSpeed) * Time.deltaTime);
-        }
+        if (!_overheated)
+            ThrusterSpeedBoost();
+
+        //vv Actually Move vv
+        transform.Translate(new Vector3(_hInput * _hSpeed, _vInput * _vSpeed) * Time.deltaTime);
 
         float yClamp = Mathf.Clamp(transform.position.y, -4, 6);
         transform.position = new Vector3(transform.position.x, yClamp, transform.position.z);
 
         HorizontalScreenWrap();
     }
+    void ThrusterSpeedBoost()
+    {
+        //'snap' the lerp value to its end value once it gets within 0.1 of it so it doesn't take forever to lerp
+        if (_boosting)
+        {
+            if (_hSpeed < _hBoostSpeed - 0.1f)
+                _hSpeed = Mathf.Lerp(_hSpeed, _hBoostSpeed, _lerpSpeed * Time.deltaTime);
+            else
+                _hSpeed = _hBoostSpeed;
+
+            if (_vSpeed < _vBoostSpeed - 0.1f)
+                _vSpeed = Mathf.Lerp(_vSpeed, _vBoostSpeed, _lerpSpeed * Time.deltaTime);
+            else
+                _vSpeed = _vBoostSpeed;
+
+            _thrusterSpriteRend.color = Color.Lerp(_thrusterSpriteRend.color, _thrusterBoostColor, _lerpSpeed * Time.deltaTime);
+        }
+        else
+        {
+            if (_hSpeed > _hBaseSpeed + 0.1f)
+                _hSpeed = Mathf.Lerp(_hSpeed, _hBaseSpeed, _lerpSpeed * Time.deltaTime);
+            else
+                _hSpeed = _hBaseSpeed;
+
+            if (_vSpeed > _vBaseSpeed + 0.1f)
+                _vSpeed = Mathf.Lerp(_vSpeed, _vBaseSpeed, _lerpSpeed * Time.deltaTime);
+            else
+                _vSpeed = _vBaseSpeed;
+
+            _thrusterSpriteRend.color = Color.Lerp(_thrusterSpriteRend.color, _thrusterBaseColor, _lerpSpeed * Time.deltaTime);
+        }
+        OverheatTimer();
+        float overheatPercentage = (1 / GameManager.Instance.ThrusterOverheatTimer) * _overheatTimer;
+        UIManager.Instance.UpdateThrusterUI(_boosting, overheatPercentage);
+    }
+    void OverheatTimer()
+    {
+        if (_boosting)
+        {
+            if (_overheatTimer < GameManager.Instance.ThrusterOverheatTimer)
+            {
+                //add time since boosting started
+                _overheatTimer = _overheatedTimerValueWhenBoostingStarted + (Time.time - _timeWhenBoostingStarted);
+            }
+            else
+            {
+                //trigger overheat
+                //enable smoke particles gameobject
+                //prevent player from boosting
+                _overheated = true;
+                _thrusterSpriteRend.color = _thrusterBaseColor;
+                _hSpeed = _hBaseSpeed;
+                _vSpeed = _vBaseSpeed;
+                _boosting = false;
+                _overheatTimer = 0;
+                UIManager.Instance.ThrusterOverheatedUI();
+            }
+        }
+        else
+        {
+            if (_overheatTimer > 0)
+            {
+                //remove time since boosting stopped
+                _overheatTimer = _overheatedTimerValueWhenBoostingStopped - (Time.time - _timeWhenBoostingStopped);
+            }
+        }
+    }
+    public void ResetOverheat()
+    {
+        _overheated = false;
+    }
+
     void HorizontalScreenWrap()
     {
         if (transform.position.x > 10.5f)

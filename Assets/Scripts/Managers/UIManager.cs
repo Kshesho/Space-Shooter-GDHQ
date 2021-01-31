@@ -30,10 +30,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] Sprite[] _livesSprites;
     [SerializeField] GameObject _gameOverContainer;
 
+    [SerializeField] Image _thrusterBar;
+    [SerializeField] Color _barBaseColor, _barOverheatColor;
+    [SerializeField] GameObject _overheatThrusterBar;
+
     //------------------------------------------------------------------------------------------------------------------
     void Awake()
     {
         _instance = this;    
+    }
+    private void Update()
+    {
+        
     }
     //------------------------------------------------------------------------------------------------------------------
 
@@ -72,6 +80,39 @@ public class UIManager : MonoBehaviour
         _ammoImage.sprite = _singleShotSprite;
     }
 
+    public void UpdateThrusterUI(bool boosting, float overheatPercent)
+    {
+        float baseFillAmount = 0.1f;
+        float maxFillAmount = 0.9f;
+        float lerpSpeed = Time.deltaTime;
+
+        if (boosting)
+        {
+            _thrusterBar.fillAmount = Mathf.Lerp(_thrusterBar.fillAmount, maxFillAmount, lerpSpeed);
+            _thrusterBar.color = Color.Lerp(_thrusterBar.color, _barOverheatColor, lerpSpeed);
+        }
+        else
+        {
+            _thrusterBar.fillAmount = Mathf.Lerp(_thrusterBar.fillAmount, baseFillAmount, lerpSpeed);
+            _thrusterBar.color = Color.Lerp(_thrusterBar.color, _barBaseColor, lerpSpeed);
+        }
+    }
+    public void ThrusterOverheatedUI()
+    {
+        _thrusterBar.gameObject.SetActive(false);
+        _thrusterBar.fillAmount = 0.1f;
+        _thrusterBar.color = _barBaseColor;
+        _overheatThrusterBar.SetActive(true);
+        //trigger animation that turns the thruster bar red and white repeatedly
+        //disable normal thruster bar
+        //enable an overheat bar that animates back to 0,1 with the smoke 
+    }
+    public void ThrusterOverheatCompleteUI()
+    {
+        _overheatThrusterBar.SetActive(false);
+        _thrusterBar.gameObject.SetActive(true);
+    }
+    
     public void EnableGameOverContainer()
     {
         _gameOverContainer.SetActive(true);

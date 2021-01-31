@@ -32,6 +32,9 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateScoreText(Score);
     }
 
+    //the time in seconds that it takes the player to overheat if they activate thrusters from 0
+    public float ThrusterOverheatTimer { get; } = 5;
+
     [SerializeField] Animator _mainCameraAnim;
     //------------------------------------------------------------------------------------------------------------------
     void Awake()
