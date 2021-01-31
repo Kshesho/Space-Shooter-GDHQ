@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     }
 
     //the time in seconds that it takes the player to overheat if they activate thrusters from 0
-    public float ThrusterOverheatTimer { get; } = 5;
+    public float ThrusterOverheatTimer { get; } = 1.5f;
 
     [SerializeField] Animator _mainCameraAnim;
     //------------------------------------------------------------------------------------------------------------------

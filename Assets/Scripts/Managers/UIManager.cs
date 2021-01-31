@@ -79,29 +79,33 @@ public class UIManager : MonoBehaviour
         _singleShotElements.SetActive(true);
         _ammoImage.sprite = _singleShotSprite;
     }
-
+    
     public void UpdateThrusterUI(bool boosting, float overheatPercent)
     {
+        float velocity = 0;
         float baseFillAmount = 0.1f;
-        float maxFillAmount = 0.9f;
-        float lerpSpeed = Time.deltaTime;
+        float maxFillAmount = 1f;
+        //I want to make sure that the amount of seconds the bar takes to fill up is 
+        //the same amount as the overheat timer. But I'm not sure how to calculate that
+        float lerpSpeed = Time.deltaTime / 5;
+
+        float currentOverheatPercentage = (maxFillAmount - baseFillAmount) * overheatPercent;
 
         if (boosting)
         {
-            _thrusterBar.fillAmount = Mathf.Lerp(_thrusterBar.fillAmount, maxFillAmount, lerpSpeed);
-            _thrusterBar.color = Color.Lerp(_thrusterBar.color, _barOverheatColor, lerpSpeed);
+            _thrusterBar.fillAmount = baseFillAmount + currentOverheatPercentage;
+            //_thrusterBar.fillAmount = Mathf.SmoothDamp(_thrusterBar.fillAmount, maxFillAmount, ref velocity, lerpSpeed);
         }
         else
         {
-            _thrusterBar.fillAmount = Mathf.Lerp(_thrusterBar.fillAmount, baseFillAmount, lerpSpeed);
-            _thrusterBar.color = Color.Lerp(_thrusterBar.color, _barBaseColor, lerpSpeed);
+            _thrusterBar.fillAmount = baseFillAmount + currentOverheatPercentage;
+            //_thrusterBar.fillAmount = Mathf.SmoothDamp(_thrusterBar.fillAmount, baseFillAmount, ref velocity, lerpSpeed);
         }
     }
     public void ThrusterOverheatedUI()
     {
         _thrusterBar.gameObject.SetActive(false);
         _thrusterBar.fillAmount = 0.1f;
-        _thrusterBar.color = _barBaseColor;
         _overheatThrusterBar.SetActive(true);
         //trigger animation that turns the thruster bar red and white repeatedly
         //disable normal thruster bar

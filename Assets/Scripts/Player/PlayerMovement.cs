@@ -83,6 +83,10 @@ public class PlayerMovement : MonoBehaviour
                 _vSpeed = _vBoostSpeed;
 
             _thrusterSpriteRend.color = Color.Lerp(_thrusterSpriteRend.color, _thrusterBoostColor, _lerpSpeed * Time.deltaTime);
+            //enable thruster particle effect
+            //change speed boost powerup to give infinite thruster (without having to hold shift)
+            //balance player speed, thrust speed, thrust overheat time, and overheat cooldown time
+            //add thrusting and overheat sound effects
         }
         else
         {
@@ -114,8 +118,6 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 //trigger overheat
-                //enable smoke particles gameobject
-                //prevent player from boosting
                 _overheated = true;
                 _thrusterSpriteRend.color = _thrusterBaseColor;
                 _hSpeed = _hBaseSpeed;
