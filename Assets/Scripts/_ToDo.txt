@@ -1,0 +1,7 @@
+Things I need to do before I add this project to my portfolio:
+
+- pause game functionality
+- increasing enemy spawning
+- balanced powerup spawns
+- "How to play" screen
+- speed boost tasks in PlayerMovement.cs
