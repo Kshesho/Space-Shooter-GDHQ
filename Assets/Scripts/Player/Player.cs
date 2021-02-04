@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     AudioSource _audio;//laser fire sound
 
     // TODO: give the player infinite ammo until the starting asteroid is blown up
-    [SerializeField] int _singleShotAmmoCount = 15, _tripleShotAmmoCount = 8;
+    int _singleShotAmmoCount = 30, _tripleShotAmmoCount = 8;
     bool _tripleShotActive;
     [SerializeField] GameObject _laserPref, _tripleShotLaserPref, _speedBoostTrail, _tripleShotIndicator;
     float _cooldownTimer;
@@ -175,7 +175,7 @@ public class Player : MonoBehaviour
 
     public void GainAmmo()
     {
-        _singleShotAmmoCount = 15;
+        _singleShotAmmoCount = 30;
         UIManager.Instance.UpdateAmmoDisplay_SingleShot(_singleShotAmmoCount);
 
         if (_tripleShotActive)
@@ -229,7 +229,7 @@ public class Player : MonoBehaviour
         UIManager.Instance.TripleShotUI();
 
         //update UI and ammo for when player loses triple shot
-        _singleShotAmmoCount = 15;
+        _singleShotAmmoCount = 30;
         UIManager.Instance.UpdateAmmoDisplay_SingleShot(_singleShotAmmoCount);
     }
     void DeactivateTripleShot()
