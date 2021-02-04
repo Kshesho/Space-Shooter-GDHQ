@@ -19,7 +19,7 @@ public class Asteroid : MonoBehaviour, IDamagable
 
     void Rotate()
     {
-        transform.Rotate(Vector3.forward * _rotateSpeed);
+        transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
     }
 
     public void Damage()

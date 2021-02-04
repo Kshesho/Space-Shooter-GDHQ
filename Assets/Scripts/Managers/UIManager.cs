@@ -122,5 +122,11 @@ public class UIManager : MonoBehaviour
         _gameOverContainer.SetActive(true);
     }
 
+    [SerializeField] GameObject _pauseMenu;
+    public void TogglePauseMenu(bool on)
+    {
+        _pauseMenu.SetActive(on);
+    }
+
 
 }

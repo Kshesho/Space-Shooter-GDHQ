@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     //the time in seconds that it takes the player to overheat if they activate thrusters from 0
     public float ThrusterOverheatTimer { get; } = 1.5f;
 
+    public bool GamePaused { get; private set; }
+
     [SerializeField] Animator _mainCameraAnim;
     //------------------------------------------------------------------------------------------------------------------
     void Awake()
@@ -52,11 +54,42 @@ public class GameManager : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Q))
             {
-                SceneManager.LoadScene(1);
+                QuitToMainMenu();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        {
+            if (GamePaused)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                PauseGame();
             }
         }
     }
     //------------------------------------------------------------------------------------------------------------------
+
+    void PauseGame()
+    {
+        Time.timeScale = 0;
+        UIManager.Instance.TogglePauseMenu(true);
+        GamePaused = true;
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        UIManager.Instance.TogglePauseMenu(false);
+        GamePaused = false;
+    }
+
+    public void QuitToMainMenu()
+    {
+        SceneManager.LoadScene(1);
+    }
 
     #region Powerups
 
