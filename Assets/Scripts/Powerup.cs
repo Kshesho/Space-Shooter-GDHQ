@@ -40,8 +40,7 @@ public class Powerup : MonoBehaviour
                     break;
                 case TypeOfPowerup.SpeedBoost:
                     SpawnCollectedAudio(1.4f);
-                    player.ActivateSpeedBoostTrail();
-                    GameManager.Instance.ActivateSpeedBoost();
+                    other.GetComponent<PlayerMovement>().ActivateSpeedBoost();
                     break;
                 case TypeOfPowerup.Health:
                     SpawnCollectedAudio(2f);

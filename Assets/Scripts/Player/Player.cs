@@ -208,18 +208,6 @@ public class Player : MonoBehaviour
         _shieldDamagedAudio.Play();
     }
 
-    public void ActivateSpeedBoostTrail()
-    {
-        _speedBoostTrail.SetActive(true);
-        StopCoroutine("DeactivateSpeedBoostTrailRtn");
-        StartCoroutine("DeactivateSpeedBoostTrailRtn");
-    }
-    IEnumerator DeactivateSpeedBoostTrailRtn()
-    {
-        yield return new WaitForSeconds(GameManager.Instance.SpeedBoostActiveTime);
-        _speedBoostTrail.SetActive(false);
-    }
-
     public void ActivateTripleShot()
     {
         _tripleShotAmmoCount = 8;

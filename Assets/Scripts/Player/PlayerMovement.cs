@@ -6,9 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     Animator _anim;
 
-    bool _boosting, _overheated;
+    bool _boosting, _overheated, _speedBoostActive;
     float _timeWhenBoostingStarted, _timeWhenBoostingStopped, _overheatedTimerValueWhenBoostingStarted, _overheatedTimerValueWhenBoostingStopped;
-    [SerializeField] float _overheatTimer, _timeBeforeOverheatStarts = 4f;
+    [SerializeField] float _overheatTimer, _timeBeforeOverheatStarts = 4f, _speedBoostActiveTime = 5;
     [SerializeField] float _hSpeed, _vSpeed;
     [SerializeField] float _hBaseSpeed = 6f, _hBoostSpeed = 8f, _vBaseSpeed = 3.5f, _vBoostSpeed = 5.5f;
     float _hInput, _vInput;
@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] SpriteRenderer _thrusterSpriteRend;
     [SerializeField] Color _thrusterBaseColor, _thrusterBoostColor;
 
+    [SerializeField] GameObject _speedBoostThruster;
 
     void Awake()
     {
@@ -30,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!_overheated)
+        if (!_overheated && !_speedBoostActive)
         {
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
@@ -56,8 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
         PlayerTurnAnimations();
 
-        if (!_overheated)
-            ThrusterSpeedBoost();
+        if (!_overheated && !_speedBoostActive)
+            ThrusterSystem();
 
         //vv Actually Move vv
         transform.Translate(new Vector3(_hInput * _hSpeed, _vInput * _vSpeed) * Time.deltaTime);
@@ -67,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
         HorizontalScreenWrap();
     }
-    void ThrusterSpeedBoost()
+    void ThrusterSystem()
     {
         //'snap' the lerp value to its end value once it gets within 0.1 of it so it doesn't take forever to lerp
         if (_boosting)
@@ -83,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
                 _vSpeed = _vBoostSpeed;
 
             _thrusterSpriteRend.color = Color.Lerp(_thrusterSpriteRend.color, _thrusterBoostColor, _lerpSpeed * Time.deltaTime);
-            //enable thruster particle effect
+            //enable thruster particle effect v/
             //change speed boost powerup to give infinite thruster (without having to hold shift)
             //balance player speed, thrust speed, thrust overheat time, and overheat cooldown time
             //add thrusting and overheat sound effects
@@ -117,14 +118,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                //trigger overheat
-                _overheated = true;
-                _thrusterSpriteRend.color = _thrusterBaseColor;
-                _hSpeed = _hBaseSpeed;
-                _vSpeed = _vBaseSpeed;
-                _boosting = false;
-                _overheatTimer = 0;
-                UIManager.Instance.ThrusterOverheatedUI();
+                TriggerOverheat();
             }
         }
         else
@@ -136,9 +130,41 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    void TriggerOverheat()
+    {
+        _overheated = true;
+        _thrusterSpriteRend.color = _thrusterBaseColor;
+        _hSpeed = _hBaseSpeed;
+        _vSpeed = _vBaseSpeed;
+        _boosting = false;
+        _overheatTimer = 0;
+        UIManager.Instance.ThrusterOverheatedUI();
+    }
     public void ResetOverheat()
     {
         _overheated = false;
+    }
+
+    public void ActivateSpeedBoost()
+    {
+        _speedBoostActive = true;
+        _hSpeed = _hBoostSpeed;
+        _vSpeed = _vBoostSpeed;
+
+        _thrusterSpriteRend.gameObject.SetActive(false);
+        _speedBoostThruster.SetActive(true);
+        UIManager.Instance.ThrusterSpeedBoostUI();
+
+        StopCoroutine("DeactivateSpeedBoostRtn");
+        StartCoroutine("DeactivateSpeedBoostRtn");
+    }
+    IEnumerator DeactivateSpeedBoostRtn()
+    {
+        yield return new WaitForSeconds(_speedBoostActiveTime);
+        _speedBoostActive = false;
+        _thrusterSpriteRend.gameObject.SetActive(true);
+        _speedBoostThruster.SetActive(false);
+        TriggerOverheat();
     }
 
     void HorizontalScreenWrap()

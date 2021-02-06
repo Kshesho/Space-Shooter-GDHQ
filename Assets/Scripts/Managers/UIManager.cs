@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] Image _thrusterBar;
     [SerializeField] Color _barBaseColor, _barOverheatColor;
-    [SerializeField] GameObject _overheatThrusterBar;
+    [SerializeField] GameObject _overheatThrusterBar, _speedBoostThrusterBar;
 
     //------------------------------------------------------------------------------------------------------------------
     void Awake()
@@ -104,6 +104,7 @@ public class UIManager : MonoBehaviour
     }
     public void ThrusterOverheatedUI()
     {
+        _speedBoostThrusterBar.SetActive(false);
         _thrusterBar.gameObject.SetActive(false);
         _thrusterBar.fillAmount = 0.1f;
         _overheatThrusterBar.SetActive(true);
@@ -117,6 +118,13 @@ public class UIManager : MonoBehaviour
         _thrusterBar.gameObject.SetActive(true);
     }
     
+    public void ThrusterSpeedBoostUI()
+    {
+        _thrusterBar.gameObject.SetActive(false);
+        _overheatThrusterBar.SetActive(false);
+        _speedBoostThrusterBar.SetActive(true);
+    }
+
     public void EnableGameOverContainer()
     {
         _gameOverContainer.SetActive(true);
