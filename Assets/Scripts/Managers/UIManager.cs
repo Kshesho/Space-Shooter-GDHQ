@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    [SerializeField] Text _scoreText;
+    [SerializeField] Text _scoreText, _multiplierText;
 
     [SerializeField] GameObject _singleShotElements, _tripleShotElements;
     [SerializeField] Text _singleShotAmmoCountText, _tripleShotAmmoCountText;
@@ -33,15 +33,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image _thrusterBar;
     [SerializeField] Color _barBaseColor, _barOverheatColor;
     [SerializeField] GameObject _overheatThrusterBar, _speedBoostThrusterBar;
+    [SerializeField] GameObject _pauseMenu;
 
     //------------------------------------------------------------------------------------------------------------------
     void Awake()
     {
         _instance = this;    
-    }
-    private void Update()
-    {
-        
     }
     //------------------------------------------------------------------------------------------------------------------
 
@@ -125,12 +122,20 @@ public class UIManager : MonoBehaviour
         _speedBoostThrusterBar.SetActive(true);
     }
 
+    public void UpdateMultiplierText(int value)
+    {
+        _multiplierText.text = "x" + value;
+        if (value == 10)
+        {
+            _multiplierText.GetComponent<Animator>().SetTrigger("rainbowTime");
+        }
+    }
+
     public void EnableGameOverContainer()
     {
         _gameOverContainer.SetActive(true);
     }
 
-    [SerializeField] GameObject _pauseMenu;
     public void TogglePauseMenu(bool on)
     {
         _pauseMenu.SetActive(on);

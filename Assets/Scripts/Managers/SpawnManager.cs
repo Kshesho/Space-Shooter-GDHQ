@@ -54,7 +54,12 @@ public class SpawnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBeforeSpawnRateModifierChange);
             if (spawnRateModifier < 0.9f)
+            {
                 spawnRateModifier += 0.1f;
+                GameManager.Instance.RaiseScoreMultiplier();
+                //tell UI manager to raise displayed spawn rate by 1
+                //tell game manager to raiss score modifier
+            }
             else
             {
                 //print("breaking out of enemy spawn rate rtn");

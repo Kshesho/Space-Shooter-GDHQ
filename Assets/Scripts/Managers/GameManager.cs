@@ -25,11 +25,52 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.EnableGameOverContainer();
     }
 
+    public int MultiplierLevel { get; private set; } = 1;
     public int Score { get; private set; }
+    float _scoreMultiplier = 1;
     public void UpdateScore(int scoreToAdd)
     {
-        Score += scoreToAdd;
+        float addedScore = scoreToAdd * _scoreMultiplier;
+        Score += Mathf.RoundToInt(addedScore);
         UIManager.Instance.UpdateScoreText(Score);
+    }
+    public void RaiseScoreMultiplier()
+    {
+        MultiplierLevel += 1;
+
+        switch (MultiplierLevel)
+        {
+            case 2:
+                _scoreMultiplier = 1.1f;
+                break;
+            case 3:
+                _scoreMultiplier = 1.2f;
+                break;
+            case 4:
+                _scoreMultiplier = 1.4f;
+                break;
+            case 5:
+                _scoreMultiplier = 1.6f;
+                break;
+            case 6:
+                _scoreMultiplier = 1.8f;
+                break;
+            case 7:
+                _scoreMultiplier = 2f;
+                break;
+            case 8:
+                _scoreMultiplier = 2.5f;
+                break;
+            case 9:
+                _scoreMultiplier = 4f;
+                break;
+            case 10:
+                _scoreMultiplier = 5f;
+                break;
+        }
+        UIManager.Instance.UpdateMultiplierText(MultiplierLevel);
+
+        print("Score multiplier: " + _scoreMultiplier);
     }
 
     //the time in seconds that it takes the player to overheat if they activate thrusters from 0
