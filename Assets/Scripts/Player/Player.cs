@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetMouseButton(0) && !GameManager.Instance.GamePaused)
+        if ((Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)) && !GameManager.Instance.GamePaused)
         {
             if (WeaponCooledDown())
                 Shoot();

@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         }
         UIManager.Instance.UpdateMultiplierText(MultiplierLevel);
 
-        print("Score multiplier: " + _scoreMultiplier);
+        //print("Score multiplier: " + _scoreMultiplier);
     }
 
     //the time in seconds that it takes the player to overheat if they activate thrusters from 0

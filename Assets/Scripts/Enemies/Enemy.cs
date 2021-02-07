@@ -32,8 +32,15 @@ public class Enemy : MonoBehaviour, IDamagable
         transform.Translate(Vector2.down * _speed * Time.deltaTime);
         if (transform.position.y < -6)
         {
-            float randomXPos = Random.Range(-9f, 9f);
-            transform.position = new Vector3(randomXPos, 8, transform.position.z);
+            if (GameManager.Instance.PlayerAlive)
+            {
+                float randomXPos = Random.Range(-9f, 9f);
+                transform.position = new Vector3(randomXPos, 8, transform.position.z);
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -60,8 +67,11 @@ public class Enemy : MonoBehaviour, IDamagable
         {
             float waitTime = Random.Range(1f, 5f);
             yield return new WaitForSeconds(waitTime);
-            Vector3 spawnPos = new Vector3(transform.position.x + 0.0135f, transform.position.y - 0.5f, 0);
-            Instantiate(_laserPref, spawnPos, Quaternion.identity);
+            if (GameManager.Instance.PlayerAlive)
+            {
+                Vector3 spawnPos = new Vector3(transform.position.x + 0.0135f, transform.position.y - 0.5f, 0);
+                Instantiate(_laserPref, spawnPos, Quaternion.identity);
+            }
             //set audio source clip to laser clip
             //play clip at point
         }

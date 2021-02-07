@@ -82,7 +82,8 @@ public class SpawnManager : MonoBehaviour
             Vector2 spawnPos = new Vector2(Random.Range(-9.5f, 9.5f), 7.77f);
 
             yield return new WaitForSeconds(waitTime);
-            Instantiate(_powerupPrefs[index], spawnPos, Quaternion.identity);
+            if (GameManager.Instance.PlayerAlive)
+                Instantiate(_powerupPrefs[index], spawnPos, Quaternion.identity);
         }
     }
 
@@ -95,7 +96,8 @@ public class SpawnManager : MonoBehaviour
             Vector2 spawnPos = new Vector2(Random.Range(-9.5f, 9.5f), 7.77f);
 
             yield return new WaitForSeconds(waitTime);
-            Instantiate(_ammoPowerupPref, spawnPos, Quaternion.identity);
+            if (GameManager.Instance.PlayerAlive)
+                Instantiate(_ammoPowerupPref, spawnPos, Quaternion.identity);
         }
     }
 
