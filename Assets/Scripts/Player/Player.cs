@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
         Instantiate(_tripleShotLaserPref, transform.position, Quaternion.identity);
         _tripleShotAmmoCount--;
 
-        _audio.pitch = 0.7f;
+        _audio.pitch = 1f;
         _audio.volume = 0.35f;
         _audio.Play();
     }
