@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(1);
             }
             else if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -129,7 +129,8 @@ public class GameManager : MonoBehaviour
 
     public void QuitToMainMenu()
     {
-        SceneManager.LoadScene(1);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
     }
 
     public void ShakeTheCamera()
