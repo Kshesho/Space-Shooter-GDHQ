@@ -35,6 +35,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _overheatThrusterBar, _speedBoostThrusterBar;
     [SerializeField] GameObject _pauseMenu;
 
+    [SerializeField] GameObject _dialogueBox;
+
     //------------------------------------------------------------------------------------------------------------------
     void Awake()
     {
@@ -139,6 +141,11 @@ public class UIManager : MonoBehaviour
     public void TogglePauseMenu(bool on)
     {
         _pauseMenu.SetActive(on);
+    }
+
+    public void DontTouchTheAsteroid()
+    {
+        _dialogueBox.SetActive(true);
     }
 
 

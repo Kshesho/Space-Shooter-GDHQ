@@ -25,7 +25,7 @@ public class Asteroid : MonoBehaviour, IDamagable
     public void Damage()
     {
         Instantiate(_explosionPref, this.transform.position, Quaternion.identity);
-        SpawnManager.Instance.StartSpawning();
+        UIManager.Instance.DontTouchTheAsteroid();
         Destroy(this.gameObject);
     }
 
